@@ -16,7 +16,9 @@ With <li> End shopping, delete product options, you can delete single or multipl
 <li> Balance check throws an error if you do not have enough funds. </li>
 </ul>
 
-<h2>Lang TR</h2>
+<h2>Lang TR (Türkçe Dil)</h2>
+<p>Bu proje, bilgisayar programlama veya bilgisayar mühendisliği okuyan ve görsel programlama dersine yardımcı olmak için yazılmış mini bir projedir.</p>
+
 <h3>Kurulum</h3>
 <p>Dosyaları indirip "DorduncuUygulama >bin> debug> DorduncuUygulama.exe" adımlarını takip ederek yazılımı çalıştırabilirsiniz.</p><br>
 <p>Düzeltme yapmak isterseniz ana klasörde bulunan "DorduncuUygulama.sln" tıklayarak "Visual Studio" üzerinden değişiklik yapabilirsiniz.
