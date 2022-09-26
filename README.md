@@ -1,4 +1,4 @@
-# Mini-Market-System
+# Mini Market System
 <h3>About The App</h3>
     <p>This application/project is a c# based mini market shopping system application developed for university students
         studying in computer and branches departments.</p>
