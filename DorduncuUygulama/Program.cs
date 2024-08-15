@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
 
 namespace DorduncuUygulama
@@ -9,7 +6,7 @@ namespace DorduncuUygulama
     static class Program
     {
         /// <summary>
-        /// Uygulamanın ana girdi noktası.
+        /// Main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
