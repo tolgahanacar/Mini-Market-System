@@ -1,34 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DorduncuUygulama
 {
     public partial class Form1 : Form
     {
-
-        void SepeteEkle()
+        private void UpdateCartTotal()
         {
-            int toplam = 0;
-            for (int i = 0; i < listBox3.Items.Count; i++)
+            var total = listBox3.Items.Cast<int>().Sum();
+            textBox11.Text = total.ToString();
+        }
+
+        private void UpdateBalance()
+        {
+            textBox12.Text = label2.Text;
+        }
+
+        private void AddItemToCart(string itemName, int price, int quantity)
+        {
+            if (quantity == 0)
             {
-                toplam += Convert.ToInt32(listBox3.Items[i]);
-
+                MessageBox.Show("Lütfen adet kısmını boş bırakmayınız!");
+                return;
             }
-            textBox11.Clear();
-            textBox11.Text += Convert.ToInt64(toplam);
+
+            if (listBox1.Items.Contains(itemName))
+            {
+                MessageBox.Show("Ürün Sepetiniz de mevcut!");
+                return;
+            }
+
+            listBox1.Items.Add(itemName);
+            listBox2.Items.Add(quantity);
+            listBox3.Items.Add(price * quantity);
+            UpdateCartTotal();
         }
-        void Bakiye()
+
+        private void PurchaseItems()
         {
-            textBox12.Clear();
-            textBox12.Text = Convert.ToString(label2.Text);
+            if (!int.TryParse(textBox11.Text, out var total) || total == 0)
+            {
+                MessageBox.Show("Lütfen sepetinize en az 1 adet ürün ekleyiniz!");
+                return;
+            }
+
+            if (!int.TryParse(label2.Text, out var balance))
+            {
+                MessageBox.Show("Bakiye bilgisi geçersiz!");
+                return;
+            }
+
+            if (balance >= total)
+            {
+                label2.Text = (balance - total).ToString();
+                UpdateBalance();
+                MessageBox.Show("Alışveriş gerçekleştirildi");
+            }
+            else
+            {
+                MessageBox.Show("Bakiye Yetersiz!");
+            }
         }
+
         public Form1()
         {
             InitializeComponent();
@@ -36,213 +70,72 @@ namespace DorduncuUygulama
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            textBox1.Text   = "Hamburger";
-            textBox2.Text   = "22";
-            textBox3.Text   = "Patates Kızartması";
-            textBox4.Text   = "13";
-            textBox5.Text   = "Coca Cola";
-            textBox6.Text   = "6";
-            textBox7.Text   = "Su";
-            textBox8.Text   = "3";
-            textBox9.Text   = "Tatlı";
-            textBox10.Text  = "9"; 
- 
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
+            textBox1.Text = "Hamburger";
+            textBox2.Text = "22";
+            textBox3.Text = "Patates Kızartması";
+            textBox4.Text = "13";
+            textBox5.Text = "Coca Cola";
+            textBox6.Text = "6";
+            textBox7.Text = "Su";
+            textBox8.Text = "3";
+            textBox9.Text = "Tatlı";
+            textBox10.Text = "9";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string ad = Convert.ToString(textBox1.Text);
-            int fiyat = Convert.ToInt16(textBox2.Text);
-            int adet = Convert.ToInt16(comboBox1.SelectedItem);
-            if (adet==0)
-            {
-                MessageBox.Show("Lütfen adet kısmını boş bırakmayınız!");
-            }
-            else
-            {
-                if (listBox1.Items.Contains(ad))
-                {
-                    MessageBox.Show("Ürün Sepetiniz de mevcut!");
-                }
-                else
-                {
-                    listBox1.Items.Add(ad);
-                    listBox2.Items.Add(adet);
-                    listBox3.Items.Add(fiyat * adet);
-                    SepeteEkle();
-                }
-            }
-            
-            
- 
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            string kontroltutar = textBox11.Text;
-            if (kontroltutar == "")
-            {
-                MessageBox.Show("Lütfen sepetinize en az 1 adet ürün ekleyiniz!");
-            }
-            else
-            {
-                int tutar = Convert.ToInt32(textBox11.Text);
-                int bakiye = Convert.ToInt32(label2.Text);
-
-                if (tutar == 0)
-                {
-                    MessageBox.Show("Lütfen sepetinize en az 1 adet ürün ekleyiniz!");
-                }
-                else if (bakiye >= tutar)
-                {
-                    MessageBox.Show("Alışveriş gerçekleştirildi");
-                    int sonuc = (bakiye - tutar);
-                    label2.Text = Convert.ToString(sonuc);
-                    Bakiye();
-
-                }
-                else
-                {
-                    MessageBox.Show("Bakiye Yetersiz!");
-                }
-            }
-            
-        }
-
-        private void textBox11_TextChanged(object sender, EventArgs e)
-        {
-            
+            AddItemToCart(textBox1.Text, int.Parse(textBox2.Text), int.Parse(comboBox1.SelectedItem.ToString()));
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string ad = Convert.ToString(textBox3.Text);
-            int fiyat = Convert.ToInt16(textBox4.Text);
-            int adet = Convert.ToInt16(comboBox2.SelectedItem);
-            if (adet == 0)
-            {
-                MessageBox.Show("Lütfen adet kısmını boş bırakmayınız!");
-            }
-            else
-            {
-                if (listBox1.Items.Contains(ad))
-                {
-                    MessageBox.Show("Ürün Sepetiniz de mevcut!");
-                }
-                else
-                {
-                    listBox1.Items.Add(ad);
-                    listBox2.Items.Add(adet);
-                    listBox3.Items.Add(fiyat * adet);
-                    SepeteEkle();
-                }
-            }
+            AddItemToCart(textBox3.Text, int.Parse(textBox4.Text), int.Parse(comboBox2.SelectedItem.ToString()));
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string ad = Convert.ToString(textBox5.Text);
-            int fiyat = Convert.ToInt16(textBox6.Text);
-            int adet = Convert.ToInt16(comboBox3.SelectedItem);
-            if (adet == 0)
-            {
-                MessageBox.Show("Lütfen adet kısmını boş bırakmayınız!");
-            }
-            else
-            {
-                if (listBox1.Items.Contains(ad))
-                {
-                    MessageBox.Show("Ürün Sepetiniz de mevcut!");
-                }
-                else
-                {
-                    listBox1.Items.Add(ad);
-                    listBox2.Items.Add(adet);
-                    listBox3.Items.Add(fiyat * adet);
-                    SepeteEkle();
-                }
-            }
+            AddItemToCart(textBox5.Text, int.Parse(textBox6.Text), int.Parse(comboBox3.SelectedItem.ToString()));
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string ad = Convert.ToString(textBox7.Text);
-            int fiyat = Convert.ToInt16(textBox8.Text);
-            int adet = Convert.ToInt16(comboBox4.SelectedItem);
-            if (adet == 0)
-            {
-                MessageBox.Show("Lütfen adet kısmını boş bırakmayınız!");
-            }
-            else
-            {
-                if (listBox1.Items.Contains(ad))
-                {
-                    MessageBox.Show("Ürün Sepetiniz de mevcut!");
-                }
-                else
-                {
-                    listBox1.Items.Add(ad);
-                    listBox2.Items.Add(adet);
-                    listBox3.Items.Add(fiyat * adet);
-                    SepeteEkle();
-                }
-            }
+            AddItemToCart(textBox7.Text, int.Parse(textBox8.Text), int.Parse(comboBox4.SelectedItem.ToString()));
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            string ad = Convert.ToString(textBox9.Text);
-            int fiyat = Convert.ToInt16(textBox10.Text);
-            int adet = Convert.ToInt16(comboBox5.SelectedItem);
-            if (adet == 0)
-            {
-                MessageBox.Show("Lütfen adet kısmını boş bırakmayınız!");
-            }
-            else
-            {
-                if (listBox1.Items.Contains(ad))
-                {
-                    MessageBox.Show("Ürün Sepetiniz de mevcut!");
-                }
-                else
-                {
-                    listBox1.Items.Add(ad);
-                    listBox2.Items.Add(adet);
-                    listBox3.Items.Add(fiyat * adet);
-                    SepeteEkle();
-                }
-            }
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            AddItemToCart(textBox9.Text, int.Parse(textBox10.Text), int.Parse(comboBox5.SelectedItem.ToString()));
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            int bakiye = Convert.ToInt32(label2.Text);
-            int yuklenecek = Convert.ToInt32(textBox13.Text);
-            int sonuc = yuklenecek + bakiye;
-            label2.Text = Convert.ToString(sonuc);
-            Bakiye();
+            if (!int.TryParse(textBox13.Text, out var amountToAdd))
+            {
+                MessageBox.Show("Geçersiz para miktarı!");
+                return;
+            }
+
+            var currentBalance = int.Parse(label2.Text);
+            label2.Text = (currentBalance + amountToAdd).ToString();
+            UpdateBalance();
             MessageBox.Show("Para Yükleme İşlemi Başarılı");
+        }
 
-
+        private void button7_Click(object sender, EventArgs e)
+        {
+            PurchaseItems();
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
-            int i = listBox1.SelectedIndex;
-            listBox1.Items.RemoveAt(i);
-            listBox2.Items.RemoveAt(i);
-            listBox3.Items.RemoveAt(i);
-            SepeteEkle();
+            var selectedIndex = listBox1.SelectedIndex;
+            if (selectedIndex >= 0)
+            {
+                listBox1.Items.RemoveAt(selectedIndex);
+                listBox2.Items.RemoveAt(selectedIndex);
+                listBox3.Items.RemoveAt(selectedIndex);
+                UpdateCartTotal();
+            }
         }
 
         private void button9_Click(object sender, EventArgs e)
@@ -250,12 +143,7 @@ namespace DorduncuUygulama
             listBox1.Items.Clear();
             listBox2.Items.Clear();
             listBox3.Items.Clear();
-            SepeteEkle();
-        }
-
-        private void textBox12_TextChanged(object sender, EventArgs e)
-        {
-            
+            UpdateCartTotal();
         }
     }
 }
